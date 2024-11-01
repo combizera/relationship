@@ -77,3 +77,7 @@ Ou seja, um comentário pertence a um post e um post pode ter *muitos* comentár
 
 ---
 
+## BelongsToMany
+
+
+
