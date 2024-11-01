@@ -15,10 +15,10 @@ class CourseFactory extends Factory
      */
     public function definition(): array
     {
-        $name = $this->faker->sentence(3);
+        $courseName = $this->faker->sentence(3);
         return [
-            'name' => $name,
-            'slug' => Str::slug($name),
+            'name' => $courseName,
+            'slug' => Str::slug($courseName),
             'description' => $this->faker->sentence(10),
         ];
     }
