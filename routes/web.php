@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    $post = \App\Models\Post::with('comments')->find(1);
-    dd($post->comments);
+    $student = \App\Models\Student::with('courses')->find(21);
+    //$student->posts()->attach(1);
+    dd($student);
     //return view('welcome');
 });
