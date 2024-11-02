@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Course;
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -15,8 +17,8 @@ class StudentCourseFactory extends Factory
     public function definition(): array
     {
         return [
-            'student_id' => $this->faker->numberBetween(1, 50),
-            'course_id' => $this->faker->numberBetween(1, 10)
+            'student_id' => Student::query()->inRandomOrder()->first()->id,
+            'course_id' => Course::query()->inRandomOrder()->first()->id,
         ];
     }
 }

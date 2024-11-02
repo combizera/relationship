@@ -6,9 +6,9 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Avatar>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Address>
  */
-class AvatarFactory extends Factory
+class AddressFactory extends Factory
 {
     /**
      * @return array<string, mixed>
@@ -16,7 +16,8 @@ class AvatarFactory extends Factory
     public function definition(): array
     {
         return [
-            'path' => 'https://randomuser.me/api/portraits/'. $this->faker->randomElement(['women/', 'men/']) . rand(0, 50) . '.jpg',
+            'street' => $this->faker->streetAddress,
+            'city' => $this->faker->city,
             'user_id' => User::query()->inRandomOrder()->first()->id,
         ];
     }

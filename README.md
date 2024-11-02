@@ -79,11 +79,11 @@ Ou seja, um comentário pertence a um post e um post pode ter *muitos* comentár
 
 ## BelongsToMany
 
-O relacionamento `BelongsToMany` é usado quando uma Model pode ter múltiplas instâncias de outra Model e vice-versa. Por exemplo, um estudante pode ter estar matriculado em vários cursos e um curso é capaz de ter vários estudantes matriculados.
+O relacionamento `BelongsToMany` é usado quando uma Model pode ter múltiplas instâncias de outra Model e vice-versa. 
 
 ```php
 // App\Models\Student.php
-public function courses(): BelongsToMany
+public function courses(): BelongsToManypa
 {
     return $this->belongsToMany(Course::class, 'student_courses');
 }
@@ -94,10 +94,13 @@ public function students(): BelongsToMany
     return $this->belongsToMany(Student::class, 'student_courses');
 }
 ```
+Ou, um estudante pode ter estar matriculado em vários cursos e um curso é capaz de ter vários estudantes matriculados.
 
 ---
 
 ## HasOneThrough
+
+
 
 ---
 
