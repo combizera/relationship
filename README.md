@@ -1,8 +1,27 @@
 # Relacionamentos no Laravel
 
-Os relacionamentos no Laravel são excelentes para gerenciar e trabalhar com relacionamentos entre diferentes tabelas do Banco de Dados.
+Os relacionamentos no Laravel são excelentes para gerenciar e trabalhar com associações entre diferentes tabelas do Banco de Dados.
 
-Nesse projeto estou me baseando pela [documentação](https://laravel.com/docs/) oficial do Laravel e também pelo curso de Relacionamento do [Clube Full-Stack](https://www.youtube.com/watch?v=pL_th7hHRxE&list=PLyugqHiq-SKcCjcxq33TGy5i-E3O0lHdv&pp=iAQB).
+Criei este repositório para documentar e consolidar meus estudos sobre os relacionamentos no Laravel. Como vim do Front-End, logo percebi necessidade de aprofundar meu entendimento em Back-End, especialmente no Laravel. Ter uma compreensão sólida sobre os relacionamentos entre tabelas além de otimizar meu trabalho também garante que as aplicações sejam bem estruturadas, eficientes e escaláveis.
+
+A ideia é que este repositório sirva tanto como uma referência pessoal quanto uma fonte de consulta para outros devs que queiram entender os relacionamentos no Laravel.
+
+## Índice
+
+- [Informações Gerais](#informações-gerais)
+   - [Convenções de Nomenclatura](#convenções-de-nomenclatura)
+
+- [Relacionamentos](#relacionamentos)
+   - [HasOne](#hasone)
+   - [HasMany](#hasmany)
+   - [BelongsTo](#belongsto)
+   - [BelongsToMany](#belongstomany)
+   - [HasOneThrough](#hasonethrough)
+   - [HasManyThrough](#hasmanythrough)
+
+- [Referências e Recursos](#referências-e-recursos)
+- [Contribuição](#contribuição)
+- [Licença](#licença)
 
 ## Informações Gerais
 
@@ -13,7 +32,7 @@ Nesse projeto estou me baseando pela [documentação](https://laravel.com/docs/)
 
 ## HasOne
 
-O relacionamento `HasOne` é usado quando um Model possui exatamente uma instância de outro Model. Por exemplo, um usuário pode ter um avatar.
+O relacionamento `HasOne` (TemUm) é usado quando uma Model possui exatamente uma instância de outra Model. Por exemplo, um usuário **tem um** avatar.
     
 ```php
 // App\Models\User.php
@@ -35,7 +54,7 @@ Ou seja, um usuário pode ter *um* avatar e um avatar pertence a um usuário.
 
 
 ## HasMany
-O relacionamento `HasMany` é usado quando um Model pode ter múltiplas instâncias de outro Model. Por exemplo, um usuário pode ter vários posts.
+O relacionamento `HasMany` (TemMuitos) é usado quando uma Model pode ter múltiplas instâncias de outro Model. Por exemplo, um usuário pode ter vários posts.
 
 ```php
 // App\Models\User.php
@@ -51,13 +70,13 @@ public function user(): BelongsTo
 }
 ```
 
-Ou seja, um usuário pode ter *muitos* posts e um post pertence a um usuário.
+Ou seja, um usuário pode ter **muitos** posts e um post pertence a um usuário.
 
 ---
 
 ## BelongsTo
 
-O relacionamento `BelongsTo` é o inverso de `HasOne` ou `HasMany`. É usado quando um Model pertence a outro Model. Por exemplo, um post pertence a um usuário.
+O relacionamento `BelongsTo` (PertenceA) é o inverso de `HasOne` e `HasMany`. É usado quando uma Model pertence a outra Model. Por exemplo, um post pertence a um usuário.
 
 ```php
 // App\Models\Comment.php
@@ -73,13 +92,13 @@ public function comments(): HasMany
 }
 ```
 
-Ou seja, um comentário pertence a um post e um post pode ter *muitos* comentários.
+Ou seja, um comentário pertence a um post e um post pode ter **muitos** comentários.
 
 ---
 
 ## BelongsToMany
 
-O relacionamento `BelongsToMany` é usado quando uma Model pode ter múltiplas instâncias de outra Model e vice-versa. 
+O relacionamento `BelongsToMany` (PertenceAMuitos) é usado quando uma Model pode ter múltiplas instâncias de outra Model e vice-versa. 
 
 ```php
 // App\Models\Student.php
@@ -94,20 +113,18 @@ public function students(): BelongsToMany
     return $this->belongsToMany(Student::class, 'student_courses');
 }
 ```
-Ou, um estudante pode ter estar matriculado em vários cursos e um curso é capaz de ter vários estudantes matriculados.
+Ou seja, um estudante pode ter estar matriculado em vários cursos e um curso é capaz de ter vários estudantes matriculados.
 
 ---
 
 ## HasOneThrough
 
-### Through - Através
-Primeiro, pra ajudar a entender, vamos traduzir a palavra `Through` para o português. `Through` significa `Através`. Então, `HasOneThrough` seria algo como `TemUmAtravés`.
-
-Usamos o `HasOneThrough` quando queremos acessar um registro que está indiretamente relacionado através de uma `Model` intermediária. Ele é útil quando um Model está a uma "distância" de outra tabela, e queremos simplificar o acesso.
+Usamos o `HasOneThrough` (TemUmAtravés) quando queremos acessar um registro que está indiretamente relacionado através de uma `Model` intermediária. Ele é útil quando um Model está a uma "distância" de outra tabela, e queremos simplificar o acesso.
 
 Primeiro fazemos o relacionamento básico entre as Models `User`, `Address` e `Order`:
 ```php
 // App\Models\User.php
+// Um usuário tem muitos pedidos e um endereço
 public function orders(): HasMany
 {
     return $this->hasMany(Order::class);
@@ -119,30 +136,36 @@ public function address(): HasOne
 }
 
 // App\Models\Order.php
+// Um pedido pertence a um usuário
 public function user(): BelongsTo
 {
     return $this->belongsTo(User::class);
 }
 
 // App\Models\Address.php
+// Um endereço pertence a um usuário
 public function user(): BelongsTo
 {
     return $this->belongsTo(User::class);
 }
 ```
 
-Agora, vamos acessar o endereço de um pedido através do usuário. Para isso, vamos criar o método `address` no Model `Order`:
+Agora, vamos acessar o endereço de um pedido **através** do usuário. Para isso, vamos criar o método `address` no Model `Order`:
 
 ```php
 // App\Models\Order.php
-
+// Um pedido tem um endereço através de um usuário
 public function address(): HasOneThrough
 {
     return $this->hasOneThrough
     (
+        // O primeiro argumento é a Model que queremos acessar
         Address::class,
+        // Model intermediária
         User::class,
+        // Chave estrangeira da Model intermediária
         'id',
+        // Chave estrangeira da Model que queremos acessar
         'user_id',
     );
 }
@@ -154,18 +177,20 @@ Ou seja, um pedido tem um endereço **através** de um usuário. Então ao invé
 
 ## HasManyThrough
 
-O `HasManyThrough` é semelhante ao `HasOneThrough`, mas ao invés de retornar um único registro, ele retorna uma coleção de registros. Neste exemplo vamos utilizar de um exemplo de `College`, que tem muitos `Teacher` e cada `Teacher` tem muitas `Lesson`.
+O `HasManyThrough` (TemMuitosAtravés) é semelhante ao `HasOneThrough`, mas ao invés de retornar um único registro, ele retorna uma `Collection` de registros. Neste exemplo vamos utilizar de um exemplo de `College`, que tem muitos `Teacher` e cada `Teacher` tem muitas `Lesson`.
 
 Primeiro, vamos criar os relacionamentos básicos entre as Models `College`, `Teacher` e `Lesson`:
 
 ```php
 // App\Models\College.php
+// Uma escola tem muitos professores
 public function teachers(): HasMany
 {
     return $this->hasMany(Teacher::class);
 }
 
 // App\Models\Teacher.php
+// Um professor pertence a uma escola e tem muitas aulas
 public function college(): BelongsTo
 {
     return $this->belongsTo(College::class);
@@ -177,6 +202,7 @@ public function lessons(): HasMany
 }
 
 // App\Models\Lesson.php
+// Uma aula pertence a um professor
 public function teacher(): BelongsTo
 {
     return $this->belongsTo(Teacher::class);
@@ -203,3 +229,25 @@ Ou seja, uma escola tem muitas aulas **através** de um professor. Ao invés de 
 
 ---
 
+## Referências e Recursos
+
+Fiz esse repositório baseado em duas principais fontes para entender e estruturar melhor os relacionamentos no Laravel.
+- [Documentação oficial do Laravel](https://laravel.com/docs/)
+- [Curso de Relacionamentos do Clube Full-Stack](https://www.youtube.com/watch?v=pL_th7hHRxE&list=PLyugqHiq-SKcCjcxq33TGy5i-E3O0lHdv&pp=iAQB)
+
+Consulte essas fontes para um estudo mais aprofundado sobre cada tipo de relacionamento 🫡
+
+## Contribuição
+
+Contribuições são bem-vindas! Se você encontrou um erro, tem sugestões de melhoria ou deseja adicionar um novo exemplo, fique à vontade para abrir uma `issue` ou um `pull request`.
+
+### Para contribuir:
+1. Faça um fork do projeto
+2. Crie uma nova branch com sua contribuição (`git checkout -b feat/nome-da-feature`)
+3. Commit suas alterações (`git commit -m 'Descrição da sua contribuição'`)
+4. Faça o push para sua branch (`git push origin feature/nome-da-sua-feature`)
+5. Abra um Pull Request para o repositório original
+
+## Licença
+
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE.md](LICENSE.md) para mais detalhes.
