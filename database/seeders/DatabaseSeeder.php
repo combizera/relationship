@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         Order::factory(50)->create();
         Address::factory(50)->create();
         College::factory(3)->create();
-        Teacher::factory(25)->create();
-        Lesson::factory(120)->create();
+        Teacher::factory(15)->create();
+        Lesson::factory(150)->create();
     }
 }

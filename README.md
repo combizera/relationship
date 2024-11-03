@@ -100,6 +100,8 @@ Ou, um estudante pode ter estar matriculado em vários cursos e um curso é capa
 
 ## HasOneThrough
 
+Primeiro, pra ajudar a entender, vamos traduzir a palavra `Through` para o português. `Through` significa `Através`. Então, `HasOneThrough` seria algo como `TemUmAtravés`.
+
 
 
 ---
