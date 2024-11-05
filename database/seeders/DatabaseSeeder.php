@@ -4,9 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\Address;
 use App\Models\Avatar;
+use App\Models\Category;
 use App\Models\College;
 use App\Models\Comment;
 use App\Models\Course;
+use App\Models\Image;
 use App\Models\Lesson;
 use App\Models\Order;
 use App\Models\Post;
@@ -37,5 +39,7 @@ class DatabaseSeeder extends Seeder
         College::factory(3)->create();
         Teacher::factory(15)->create();
         Lesson::factory(150)->create();
+        Image::factory(10)->create();
+        Category::factory(10)->create();
     }
 }

@@ -30,7 +30,7 @@ A ideia é que este repositório sirva tanto como uma referência pessoal quanto
 
 ---
 
-## HasOne
+## HasOne 1:1
 
 O relacionamento `HasOne` (TemUm) é usado quando uma Model possui exatamente uma instância de outra Model. Por exemplo, um usuário **tem um** avatar.
     
@@ -53,7 +53,7 @@ Ou seja, um usuário pode ter *um* avatar e um avatar pertence a um usuário.
 ---
 
 
-## HasMany
+## HasMany 1:N
 O relacionamento `HasMany` (TemMuitos) é usado quando uma Model pode ter múltiplas instâncias de outro Model. Por exemplo, um usuário pode ter vários posts.
 
 ```php
@@ -74,7 +74,7 @@ Ou seja, um usuário pode ter **muitos** posts e um post pertence a um usuário.
 
 ---
 
-## BelongsTo
+## BelongsTo N:1
 
 O relacionamento `BelongsTo` (PertenceA) é o inverso de `HasOne` e `HasMany`. É usado quando uma Model pertence a outra Model. Por exemplo, um post pertence a um usuário.
 
@@ -96,7 +96,7 @@ Ou seja, um comentário pertence a um post e um post pode ter **muitos** coment�
 
 ---
 
-## BelongsToMany
+## BelongsToMany N:N
 
 O relacionamento `BelongsToMany` (PertenceAMuitos) é usado quando uma Model pode ter múltiplas instâncias de outra Model e vice-versa. 
 
@@ -173,6 +173,10 @@ public function address(): HasOneThrough
 
 Ou seja, um pedido tem um endereço **através** de um usuário. Então ao invés de acessar o endereço através do usuário, podemos acessar diretamente pelo pedido.
 
+### Disclaimer
+
+O relacionamento `HasOneThrough` e o `HasManyThrough` são próprios do Laravel. Não é algo que você vai usar com frequência, mas é bom saber que existe.
+
 ---
 
 ## HasManyThrough
@@ -228,6 +232,10 @@ public function lessons(): HasManyThrough
 Ou seja, uma escola tem muitas aulas **através** de um professor. Ao invés de acessar as aulas através do professor, podemos acessar diretamente pela Model `College`.
 
 ---
+
+## Relacionamentos Polimórficos
+
+
 
 ## Referências e Recursos
 

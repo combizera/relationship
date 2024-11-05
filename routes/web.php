@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    $college = \App\Models\College::query()->find(1);
+    $image = \App\Models\Image::query()->find(10);
 
-    dd($college->lessons);
+    dd($image->imageable);
 });
