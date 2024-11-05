@@ -229,6 +229,69 @@ Ou seja, uma escola tem muitas aulas **através** de um professor. Ao invés de 
 
 ---
 
+## Polimorfismo
+
+O polimorfismo é um conceito que permite que um objeto possa ser tratado de várias formas. No Laravel, o polimorfismo é usado para criar relações polimórficas entre Models.
+
+Sendo mais didático, imagine que temos uma Model `Comment` que pode ser associada a uma Model `Post` ou a uma Model `Video`. Neste caso, podemos usar o polimorfismo para criar uma relação polimórfica entre `Comment` e `Post` e `Comment` e `Video`.
+
+```php
+// App\Models\Comment.php
+public function commentable(): MorphTo
+{
+    return $this->morphTo();
+}
+
+// App\Models\Post.php
+public function comments(): MorphMany
+{
+    return $this->morphMany(Comment::class, 'commentable');
+}
+
+// App\Models\Video.php
+public function comments(): MorphMany
+{
+    return $this->morphMany(Comment::class, 'commentable');
+}
+```
+
+Ou seja, um comentário pode ser associado a um post ou a um vídeo.
+
+_ps: Esse sufixo `able` é uma convenção do Laravel para indicar que a Model é polimórfica. No exemplo dado, `commentable` é o método que define a relação polimórfica._ 
+
+Isto posto, vamos falar agora sobre as relações polimórficas disponíveis no Laravel:
+
+---
+
+## MorphOne
+
+O relacionamento `MorphOne` é usado quando uma Model possui exatamente uma instância de outra Model. Vamos dar o exemplo de uma uma `Image` em um Blog, que pode ser associada a um `Post` ou a uma `Category`.
+
+```php
+// App\Models\Image.php
+public function imageable(): MorphTo
+{
+    return $this->morphTo();
+}
+
+// App\Models\Post.php
+public function image(): MorphOne
+{
+    return $this->morphOne(Image::class, 'imageable');
+}
+
+// App\Models\Category.php
+public function image(): MorphOne
+{
+    return $this->morphOne(Image::class, 'imageable');
+}
+```
+
+Desta forma, definimos que uma imagem pode ser associada a um post ou a uma categoria.
+
+---
+
+
 ## Referências e Recursos
 
 Fiz esse repositório baseado em duas principais fontes para entender e estruturar melhor os relacionamentos no Laravel.
