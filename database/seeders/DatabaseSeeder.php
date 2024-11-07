@@ -17,6 +17,7 @@ use App\Models\PostTag;
 use App\Models\Student;
 use App\Models\StudentCourse;
 use App\Models\Tag;
+use App\Models\TagModel;
 use App\Models\Teacher;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -49,5 +50,7 @@ class DatabaseSeeder extends Seeder
         Book::factory(30)->create();
         Video::factory(30)->create();
         Comment::factory(100)->create();
+
+        TagModel::factory(50)->create();
     }
 }

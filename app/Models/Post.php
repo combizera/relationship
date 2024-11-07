@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Post extends Model
 {
@@ -26,9 +27,12 @@ class Post extends Model
         return $this->morphMany(Comment::class, 'commentable');
     }
 
-    public function tags(): BelongsToMany
+    public function tags(): MorphToMany
     {
-        return $this->belongsToMany(Tag::class, 'post_tags', 'post_id', 'tag_id');
+        return $this->morphToMany(
+            Tag::class,
+            'taggable',
+        );
     }
 
     public function image(): MorphOne

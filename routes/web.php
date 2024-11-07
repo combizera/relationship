@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    $book = \App\Models\Book::query()->find(1);
+    $tags = \App\Models\Tag::query()->find(1);
 
-    dd($book, $book->commentable);
+    dd($tags);
 });
