@@ -18,15 +18,21 @@ A ideia é que este repositório sirva tanto como uma referência pessoal quanto
    - [BelongsToMany](#belongstomany)
    - [HasOneThrough](#hasonethrough)
    - [HasManyThrough](#hasmanythrough)
+   - [Polimorfismo](#polimorfismo)
+   - [MorphOne](#morphone)
+   - [MorphMany](#morphmany)
+   - [MorphTo](#morphto)
+   - [MorphToMany](#morphtomany)
 
 - [Referências e Recursos](#referências-e-recursos)
 - [Contribuição](#contribuição)
-- [Licença](#licença)
 
 ## Informações Gerais
 
 1. Convenções de nomenclatura
    - No Laravel assumimos que a chave estrangeira (FK) terá o nome do Model em `snake_case` seguido de `_id`. Por exemplo, se temos um Model `User`, a chave estrangeira será `user_id`.
+   - O Laravel também assume que a chave primária (PK) será `id`. Se você deseja usar outro nome para a chave primária, você deve especificar isso no Model.
+   - Em relacionamento polimórficos o Laravel tem por convenção que o nome do método seja o nome da relação seguido de `able`. Por exemplo, se temos um relacionamento polimórfico entre `Comment` e `Post`, o método será `commentable`.
 
 ---
 
@@ -104,7 +110,12 @@ O relacionamento `BelongsToMany` (PertenceAMuitos) é usado quando uma Model pod
 // App\Models\Student.php
 public function courses(): BelongsToManypa
 {
-    return $this->belongsToMany(Course::class, 'student_courses');
+    return $this->belongsToMany(
+        // Model que queremos relacionar
+        Course::class, 
+        // Nome da tabela intermediária
+        'student_courses'
+    );
 }
 
 // App\Models\Course.php
@@ -291,6 +302,95 @@ Desta forma, definimos que uma imagem pode ser associada a um post ou a uma cate
 
 ---
 
+## MorphMany
+
+O `MorphMany` é usado quando uma Model pode ter múltiplas instâncias de outra Model. Por exemplo um `Comment` que pode ser associada a um `Post` ou a uma `Video`.
+
+```php
+// App\Models\Comment.php
+public function commentable(): MorphTo
+{
+    return $this->morphTo();
+}
+
+// App\Models\Post.php
+public function comments(): MorphMany
+{
+    return $this->morphMany(Comment::class, 'commentable');
+}
+
+// App\Models\Video.php
+public function comments(): MorphMany
+{
+    return $this->morphMany(Comment::class, 'commentable');
+}
+```
+
+Desta forma, definimos que um comentário pode ser associado a um `Post` ou a um `Video`.
+
+---
+
+## MorphTo
+
+O relacionamento `MorphTo` é usado quando uma Model pode pertencer a uma de várias Models. Vamos dar o exemplo de uma `Image` que pode pertencer a um `Post` ou a uma `Category`.
+
+```php
+// App\Models\Image.php
+public function imageable(): MorphTo
+{
+    return $this->morphTo();
+}
+
+// App\Models\Post.php
+public function image(): MorphOne
+{
+    return $this->morphOne(Image::class, 'imageable');
+}
+
+// App\Models\Category.php
+public function image(): MorphOne
+{
+    return $this->morphOne(Image::class, 'imageable');
+}
+```
+
+Desta forma, definimos que uma imagem pode pertencer a um post ou a uma categoria.
+
+---
+
+## MorphToMany
+
+O relacionamento `MorphToMany` é usado quando uma Model pode ter múltiplas instâncias de outra Model e vice-versa. Vamos usar o exemplo clássico de `Tag` que pode ser associada a um `Post` ou a uma `Video`.
+
+```php
+// App\Models\Tag.php
+public function posts(): MorphToMany
+{
+    return $this->morphedByMany(Post::class, 'taggable');
+}
+
+public function videos(): MorphToMany
+{
+    return $this->morphedByMany(Video::class, 'taggable');
+}
+
+// App\Models\Post.php
+public function tags(): MorphToMany
+{
+    return $this->morphToMany(Tag::class, 'taggable');
+}
+
+// App\Models\Video.php
+public function tags(): MorphToMany
+{
+    return $this->morphToMany(Tag::class, 'taggable');
+}
+```
+
+Desta forma, definimos que uma tag pode ser associada a um post ou a um vídeo.
+
+---
+
 
 ## Referências e Recursos
 
@@ -310,7 +410,3 @@ Contribuições são bem-vindas! Se você encontrou um erro, tem sugestões de m
 3. Commit suas alterações (`git commit -m 'Descrição da sua contribuição'`)
 4. Faça o push para sua branch (`git push origin feature/nome-da-sua-feature`)
 5. Abra um Pull Request para o repositório original
-
-## Licença
-
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE.md](LICENSE.md) para mais detalhes.
