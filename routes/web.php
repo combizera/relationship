@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    $image = \App\Models\Image::query()->find(10);
+    $book = \App\Models\Book::query()->find(1);
 
-    dd($image->imageable);
+    dd($book, $book->commentable);
 });
