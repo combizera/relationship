@@ -130,6 +130,11 @@ Ou seja, um estudante pode ter estar matriculado em vários cursos e um curso é
 
 ## HasOneThrough
 
+### Laravel e a DX (Developer Experience)
+O Laravel é conhecido por sua DX (Developer Experience) e por simplificar tarefas complexas. Uma dessas facilidades que temos no processo de codar é a utilização de relacionamentos `HasOneThrough` e `HasManyThrough`. 
+
+---
+
 Usamos o `HasOneThrough` (TemUmAtravés) quando queremos acessar um registro que está indiretamente relacionado através de uma `Model` intermediária. Ele é útil quando um Model está a uma "distância" de outra tabela, e queremos simplificar o acesso.
 
 Primeiro fazemos o relacionamento básico entre as Models `User`, `Address` e `Order`:
