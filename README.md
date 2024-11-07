@@ -183,6 +183,8 @@ public function address(): HasOneThrough
         'id',
         // Chave estrangeira da Model que queremos acessar
         'user_id',
+        // Chave primária da Model que queremos acessar
+        'id',
     );
 }
 ```
