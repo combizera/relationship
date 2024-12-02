@@ -14,6 +14,7 @@ A ideia é que este repositório sirva tanto como uma referência pessoal quanto
 - [Relacionamentos](#relacionamentos)
    - [HasOne](#hasone)
    - [HasMany](#hasmany)
+   - [HasOneOfMany](#hasoneofmany)
    - [BelongsTo](#belongsto)
    - [BelongsToMany](#belongstomany)
    - [HasOneThrough](#hasonethrough)
@@ -77,6 +78,36 @@ public function user(): BelongsTo
 ```
 
 Ou seja, um usuário pode ter **muitos** posts e um post pertence a um usuário.
+
+---
+
+## HasOneOfMany
+
+O relacionamento `HasOneOfMany` (TemUmDeMuitos) é usado quando uma Model possui exatamente uma instância de outra Model, mas essa Model pode estar associada a várias instâncias da Model pai. A diferença entre `HasOne` e `HasOneOfMany` é que, no `HasOneOfMany`, a instância única é determinada por uma condição ou critério, como o registro mais recente, mais antigo ou com base em outra característica.
+
+### Exemplo
+
+Imagine que um usuário pode ter vários endereços, mas queremos identificar o endereço principal com base no campo `is_main`:
+
+```php
+// App\Models\User.php
+use Illuminate\Database\Eloquent\Relations\HasOneOfMany;
+
+public function mainAddress(): HasOneOfMany
+{
+    return $this->hasOneOfMany(Address::class, 'user_id')->where('is_main', true);
+}
+
+// App\Models\Address.php
+public function user(): BelongsTo
+{
+    return $this->belongsTo(User::class);
+}
+```
+
+Nesse exemplo, o método mainAddress retorna apenas o endereço principal do usuário, baseado na condição `is_main = true`.
+
+Use `HasOneOfMany` sempre que precisar trabalhar com relações que exijam critérios específicos para determinar a instância única do relacionamento.
 
 ---
 
